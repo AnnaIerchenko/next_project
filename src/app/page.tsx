@@ -57,6 +57,45 @@ export default function Home() {
                 ]} 
                 categoryId={1}
               />
+              <ProductsGroupList title="Kombo" items={[
+                {
+                  id: 1,
+                  name: "Cheesburger Pizza",
+                  imageUrl: "https://media.dodostatic.net/image/r:233x233/11EE7D610D2925109AB2E1C92CC5383C.avif",
+                  price: 10,
+                  items: [{ price: 15}],
+                },
+                {
+                  id: 2,
+                  name: "Cheesburger Pizza",
+                  imageUrl: "https://media.dodostatic.net/image/r:233x233/11EE7D610D2925109AB2E1C92CC5383C.avif",
+                  price: 10,
+                  items: [{ price: 15}],
+                },
+                {
+                  id: 3,
+                  name: "Cheesburger Pizza",
+                  imageUrl: "https://media.dodostatic.net/image/r:233x233/11EE7D610D2925109AB2E1C92CC5383C.avif",
+                  price: 10,
+                  items: [{ price: 15}],
+                },
+                {
+                  id: 4,
+                  name: "Cheesburger Pizza",
+                  imageUrl: "https://media.dodostatic.net/image/r:233x233/11EE7D610D2925109AB2E1C92CC5383C.avif",
+                  price: 10,
+                  items: [{ price: 15}],
+                },
+                {
+                  id: 5,
+                  name: "Cheesburger Pizza",
+                  imageUrl: "https://media.dodostatic.net/image/r:233x233/11EE7D610D2925109AB2E1C92CC5383C.avif",
+                  price: 10,
+                  items: [{ price: 15}],
+                },
+                ]} 
+                categoryId={2}
+              />
             </div>
           </div>
         </div>
