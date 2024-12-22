@@ -1,7 +1,9 @@
+'use client'
 import React from "react"
 import { FilterCheckbox, RangeSlider, Title } from "."
 import { Input } from "../ui"
 import { CheckboxFiltersGroup } from "./checkbox-filters-group"
+import { useFilterIngredients } from "../../../hooks/useFilterIngredients"
 
 
 interface Props {
@@ -9,13 +11,16 @@ interface Props {
 }
 
 export const Filters: React.FC<Props> = ({className}) => {
+  const {ingredients, loading, onAddId, selectedIds} = useFilterIngredients()
+  const items = ingredients.map((item) => ({ value: String(item.id), text: item.name}))
+
   return (
     <div className={className}>
       <Title text="Filter" size="sm" className="mb-5 font-bold"/>
       {/* upper filters */}
       <div className="flex flex-col gap-4">
-        <FilterCheckbox text="can create" value="1"/>
-        <FilterCheckbox text="new" value="2"/>
+        <FilterCheckbox name="option1" text="can create" value="1"/>
+        <FilterCheckbox name="option2" text="new" value="2"/>
       </div>
       {/* price's filter */}
       <div className="mt-5 border-y border-y-neutral-100 py-6 pb-7">
@@ -29,92 +34,14 @@ export const Filters: React.FC<Props> = ({className}) => {
 
       <CheckboxFiltersGroup 
         title="Ingredients"
+        name="Ingredients"
         className="mt-5"
         limit={6}
-        defaultItems={[
-          {
-            text: "Cheese souce",
-            value: "1"
-          },
-          {
-            text: "Tomato souce",
-            value: "2"
-          },
-          {
-            text: "Mushroom souce",
-            value: "3"
-          },
-          {
-            text: "solt cucumbers",
-            value: "4"
-          },
-          {
-            text: "Mozarrela",
-            value: "5"
-          },
-        ]}
-        items={[
-          {
-            text: "Che souce",
-            value: "1"
-          },
-          {
-            text: "Tomato souce",
-            value: "2"
-          },
-          {
-            text: "Mushroom souce",
-            value: "3"
-          },
-          {
-            text: "solt cucumbers",
-            value: "4"
-          },
-          {
-            text: "Mozarrela",
-            value: "5"
-          },
-          {
-            text: "Cheese souce",
-            value: "6"
-          },
-          {
-            text: "Tomato souce",
-            value: "7"
-          },
-          {
-            text: "Mushroom souce",
-            value: "8"
-          },
-          {
-            text: "solt cucumbers",
-            value: "9"
-          },
-          {
-            text: "Mozarrela",
-            value: "10"
-          },
-          {
-            text: "Cheese souce",
-            value: "6"
-          },
-          {
-            text: "Tomato souce",
-            value: "7"
-          },
-          {
-            text: "Mushroom souce",
-            value: "8"
-          },
-          {
-            text: "solt cucumbers",
-            value: "9"
-          },
-          {
-            text: "Mozarrela",
-            value: "10"
-          },
-        ]}
+        defaultItems={items.slice(0, 4)}
+        items={items}
+        loading={loading}
+        onClickCheckbox={onAddId}
+        selectedIds={selectedIds}
       />
     </div>
   )
