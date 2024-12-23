@@ -8,12 +8,12 @@ type Item = FilterCheckboxProps
 interface Props {
   title: string;
   items: Item[];
-  defaultItems: Item[];
-  limit: number;
+  defaultItems?: Item[];
+  limit?: number;
   loading?: boolean;
   searchInputPlaceholder?: string;
   onClickCheckbox?: (id: string) => void;
-  selectedIds?: Set<string>;
+  selected?: Set<string>;
   defaultValue?: string[];
   className?: string;
   name?: string;
@@ -23,21 +23,18 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
   title,
   items,
   defaultItems,
-  limit,
+  limit=5,
   searchInputPlaceholder="Search...",
   className,
   loading,
   onClickCheckbox,
-  selectedIds,
-  defaultValue,
+  selected,
   name,
 }) => {
 
   const [showAll, setShowAll] = React.useState(false)
   const [searchValue, setSearchValue] = React.useState('')
-  const listProd = showAll 
-  ? items.filter((item) => item.text.toLowerCase().includes(searchValue.toLocaleLowerCase()))
-  : defaultItems?.slice(0, limit)
+
   const onChangeSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value) 
   }
@@ -51,7 +48,12 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
       ))}
         <Skeleton className='w-28 h-6 mb-4 rounded-[8px]'/>
     </div>
-  }
+  } 
+
+  const listProd = showAll 
+  ? items.filter((item) => item.text.toLowerCase().includes(searchValue.toLocaleLowerCase()))
+  : (defaultItems || items).slice(0, limit)
+
   return (
     <div className={className}>
       <p className='font-bold mb-3'>{title}</p>
@@ -59,7 +61,8 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
       <div className='mb-5'>
         <Input 
           onChange={onChangeSearchInput} 
-          placeholder={searchInputPlaceholder} className='bg-gray-50 border-none'/>
+          placeholder={searchInputPlaceholder} 
+          className='bg-gray-50 border-none'/>
       </div>
       )}
       <div className='flex flex-col gap-4 max-h-96 pr-2 overflow-auto scrollbar'>
@@ -69,7 +72,7 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
             text={item.text}
             value={item.value}
             endAdornment={item.endAdornment}
-            checked={selectedIds?.has(item.value)}
+            checked={selected?.has(item.value)}
             onCheckedChange={() => onClickCheckbox?.(item.value)}
             name={name}
           />
