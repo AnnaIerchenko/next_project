@@ -6,13 +6,11 @@ import { Button } from "../ui";
 interface Props {
   imageUrl: string;
   name: string;
-  ingredients: any[];
-  items?: any[];
   onClicked?: VoidFunction;
   className?: string;
 }
 
-export const ChooseProductForm: React.FC<Props> = ({imageUrl, name, ingredients, items, onClicked, className}) => {
+export const ChooseProductForm: React.FC<Props> = ({imageUrl, name, onClicked, className}) => {
   const textDetails = '30 sm, traditional pastry'
   const totalPrice = '350'
   return (
