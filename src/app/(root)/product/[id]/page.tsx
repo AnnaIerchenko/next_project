@@ -18,7 +18,7 @@ export default async function ProductPage({ params: { id } }: { params: { id: st
           <p className="text-gray-400">Lorem ipsum dolor sit amet fugiat,</p>
           <GroupVariants
             className="flex flex-wrap gap-2 mt-4"
-            selectedValue="2"
+            value="2"
             items={[
               {
                 name: 'Small',
