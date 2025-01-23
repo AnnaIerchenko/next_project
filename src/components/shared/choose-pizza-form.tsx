@@ -13,24 +13,26 @@ interface Props {
   imageUrl: string;
   name: string;
   ingredients: Ingredient[];
+  loading?: boolean;
   items: ProductItem[];
-  onClickAddCart?: VoidFunction;
+  onSubmit: (itemId: number, ingredients: number[]) => void;
   className?: string;
 }
 
-export const ChoosePizzaForm: React.FC<Props> = ({imageUrl, name, ingredients, items, onClickAddCart, className}) => {
-  const {size, type, selectedIngredients,availableSizes, setSize, setType, addIngredient} = usePizzaOptions(items)
+export const ChoosePizzaForm: React.FC<Props> = ({imageUrl, name, ingredients, items, loading, onSubmit, className}) => {
+  const {size, type, selectedIngredients,availableSizes, currentItemId, setSize, setType, addIngredient} = usePizzaOptions(items)
 
- const {totalPrice, textDetails} = getPizzaDetails(type, size, items, ingredients, selectedIngredients)
+ const {totalPrice, textDetails} = getPizzaDetails(type, size, items, ingredients,selectedIngredients)
 
   const handleClickAdd = () => {
-    onClickAddCart?.()
+    if(currentItemId){
+    onSubmit(currentItemId, Array.from(selectedIngredients))
     console.log({
       size,
       type,
       ingredients: selectedIngredients,
     })
-  }
+  }}
  
   // console.log({items,filteredPizzasByType, availablePizzaSizes})
 
@@ -70,7 +72,10 @@ export const ChoosePizzaForm: React.FC<Props> = ({imageUrl, name, ingredients, i
             ))}
           </div>
         </div>
-        <Button onClick={handleClickAdd} className="h-[56px] px-10 text-base rounded-[18px] w-full mt-10">
+        <Button
+          loading={loading} 
+          onClick={handleClickAdd} 
+          className="h-[56px] px-10 text-base rounded-[18px] w-full mt-10">
           Add to cart for {totalPrice}$
         </Button>
       </div>

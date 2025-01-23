@@ -1,9 +1,9 @@
 'use client';
-import { cn } from "@/lib/utils";
-import { ProductCard, Title } from ".";
-import {useIntersection} from "react-use";
-import React from "react";
-import { useCategoryStore } from "../../../store/category";
+import { cn } from '@/lib/utils';
+import { ProductCard, Title } from '.';
+import { useIntersection } from 'react-use';
+import React from 'react';
+import { useCategoryStore } from '../../../store/category';
 
 interface Props {
   title: string;
@@ -14,24 +14,29 @@ interface Props {
 }
 
 export const ProductsGroupList: React.FC<Props> = ({
-  title, items, className, listClassName, categoryId}) => {
-    const setActiveCategoryId = useCategoryStore((state) => state.setActiveId);
-    const intersectionRef = React.useRef(null)
-    const intersection = useIntersection(intersectionRef, {
-      threshold: 0.4,
-    })
-    React.useEffect(() => {
-      if(intersection?.isIntersecting){
-        setActiveCategoryId(categoryId)
-      }
-    }, [intersection?.isIntersecting])
+  title,
+  items,
+  className,
+  listClassName,
+  categoryId,
+}) => {
+  const setActiveCategoryId = useCategoryStore((state) => state.setActiveId);
+  const intersectionRef = React.useRef(null);
+  const intersection = useIntersection(intersectionRef, {
+    threshold: 0.4,
+  });
+  React.useEffect(() => {
+    if (intersection?.isIntersecting) {
+      setActiveCategoryId(categoryId);
+    }
+  }, [intersection?.isIntersecting]);
   return (
     <div className={className} id={title} ref={intersectionRef}>
       <Title text={title} size="lg" className="font-extrabold mb-5" />
 
-      <div className={cn("grid grid-cols-3 gap-[50px]", listClassName)}>
+      <div className={cn('grid grid-cols-3 gap-[50px]', listClassName)}>
         {items.map((product, i) => (
-          <ProductCard 
+          <ProductCard
             key={product.id}
             id={product.id}
             name={product.name}
@@ -41,5 +46,5 @@ export const ProductsGroupList: React.FC<Props> = ({
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
