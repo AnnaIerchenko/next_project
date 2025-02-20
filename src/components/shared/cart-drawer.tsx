@@ -12,25 +12,26 @@ import {
 import Link from 'next/link';
 import { Button } from '../ui';
 import { ArrowRight } from 'lucide-react';
-import { getCartItemDetails } from '@/lib';
-import { useCartStore } from '../../../store';
+
 import { PizzaSize, PizzaType } from '../../../constants/pizza';
 import { CartDrawerItem } from '.';
+import { getCartItemDetails } from '@/lib';
+import { useCartStore } from '../../store';
 
 interface Props {
   className?: string;
 }
 
 export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children, className }) => {
-  const [totalAmount, fetchCartItems, items, updateItemQuantity, removeCartItem] = useCartStore(
-    (state) => [
+  const [totalAmount, fetchCartItems, items, updateItemQuantity, removeCartItem, loading] =
+    useCartStore((state) => [
       state.totalAmount,
       state.fetchCartItems,
       state.items,
       state.updateItemQuantity,
       state.removeCartItem,
-    ],
-  );
+      state.loading,
+    ]);
 
   React.useEffect(() => {
     fetchCartItems();
@@ -40,6 +41,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children,
     const newQuantity = type === 'plus' ? quantity + 1 : quantity - 1;
     updateItemQuantity(id, newQuantity);
   };
+
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -53,8 +55,8 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children,
         {/* items */}
         <div className="-mx-6 mt-5 overflow-auto flex-1">
           {items.map((item) => (
-          <div className="mb-2" key={item.id}>
-              <CartDrawerItem      
+            <div className="mb-2" key={item.id}>
+              <CartDrawerItem
                 id={item.id}
                 imageUrl={item.imageUrl}
                 details={
@@ -72,7 +74,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children,
                 onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
                 onClickRemove={() => removeCartItem(item.id)}
               />
-          </div>
+            </div>
           ))}
         </div>
         <SheetFooter className="mx-6 bg-white p-8">
@@ -82,7 +84,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children,
                 Total:
                 <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2" />
               </span>
-              <span className="font-bold text-lg">10 $</span>
+              <span className="font-bold text-lg">${totalAmount} $</span>
             </div>
 
             <Link href="/cart">

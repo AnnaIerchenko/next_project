@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import { Api } from '../services/api-client';
-import { getCartDetails } from '@/lib';
-import { CartStateItem } from '@/lib/get-cart-details';
-import { CreateCartItemValues } from '../services/dto/cart.dto';
+
+import { CartStateItem, getCartDetails } from '@/lib/get-cart-details';
+import { Api } from '../../services/api-client';
+import { CreateCartItemValues } from '../../services/dto/cart.dto';
 
 export interface CartState {
   loading: boolean;
@@ -17,7 +17,6 @@ export interface CartState {
   updateItemQuantity: (id: number, quantity: number) => Promise<void>;
 
   //request for add item to cart
-  //CreateCartItemValues
   addCartItem: (values: any) => Promise<void>;
 
   //request for delete item
@@ -35,6 +34,11 @@ export const useCartStore = create<CartState>((set, get) => ({
       set({ loading: true, error: false });
       const data = await Api.cart.getCart();
       set(getCartDetails(data));
+      // const newCartDetails = getCartDetails(data);
+      // // Only update state if it has changed
+      // if (JSON.stringify(newCartDetails) !== JSON.stringify(get().items)) {
+      //   set(newCartDetails);
+      // }
     } catch (error) {
       console.error(error);
       set({ error: true });
@@ -47,6 +51,11 @@ export const useCartStore = create<CartState>((set, get) => ({
       set({ loading: true, error: false });
       const data = await Api.cart.updateItemQuantity(id, quantity);
       set(getCartDetails(data));
+      // const newCartDetails = getCartDetails(data);
+      // // Only update state if it has changed
+      // if (JSON.stringify(newCartDetails) !== JSON.stringify(get().items)) {
+      //   set(newCartDetails);
+      // }
     } catch (error) {
       console.error(error);
       set({ error: true });
@@ -59,6 +68,11 @@ export const useCartStore = create<CartState>((set, get) => ({
       set({ loading: true, error: false });
       const data = await Api.cart.removeCartItem(id);
       set(getCartDetails(data));
+      // const newCartDetails = getCartDetails(data);
+      // // Only update state if it has changed
+      // if (JSON.stringify(newCartDetails) !== JSON.stringify(get().items)) {
+      //   set(newCartDetails);
+      // }
     } catch (error) {
       console.error(error);
       set({ error: true });
@@ -71,6 +85,11 @@ export const useCartStore = create<CartState>((set, get) => ({
       set({ loading: true, error: false });
       const data = await Api.cart.addCartItem(values);
       set(getCartDetails(data));
+      // const newCartDetails = getCartDetails(data);
+      // // Only update state if it has changed
+      // if (JSON.stringify(newCartDetails) !== JSON.stringify(get().items)) {
+      //   set(newCartDetails);
+      // }
     } catch (error) {
       console.error(error);
       set({ error: true });
