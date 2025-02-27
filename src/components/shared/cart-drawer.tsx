@@ -1,8 +1,10 @@
 'use client';
 import React from 'react';
+import Image from 'next/image';
 
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
@@ -11,12 +13,13 @@ import {
 } from '../ui/sheet';
 import Link from 'next/link';
 import { Button } from '../ui';
-import { ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { PizzaSize, PizzaType } from '../../../constants/pizza';
-import { CartDrawerItem } from '.';
+import { CartDrawerItem, Title } from '.';
 import { getCartItemDetails } from '@/lib';
 import { useCartStore } from '../../store';
+import { cn } from '@/lib/utils';
 
 interface Props {
   className?: string;
@@ -46,13 +49,34 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children,
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#f4f1ee]">
+        <div className={cn('flex flex-col h-full', !totalAmount && 'justify-center')}>
+        {totalAmount > 0 && (
         <SheetHeader>
           <SheetTitle>
             In your cart <span className="font-bold">{items.length} items</span>
           </SheetTitle>
         </SheetHeader>
+        )}
 
+        {!totalAmount && (
+        <div className='flex flex-col items-center justify-center w-72 mx-auto'>
+          <Image src="/images/empty-box.png" alt="empty box" width={120} height={120}/>
+          <Title size="sm"  text="Cart is empty" className="text-center font-bold my-2"/>
+          <p className='text-center text-neutral-500 mb-5'>
+            Add at least one item to make order
+          </p>
+
+          <SheetClose>
+            <Button className='w-56 h-12 text-base' size="lg">
+              <ArrowLeft className='w-5 mr-2'/>
+              Turn back
+            </Button>
+          </SheetClose>
+        </div>
+      )}
         {/* items */}
+        {totalAmount > 0 && (
+        <>
         <div className="-mx-6 mt-5 overflow-auto flex-1">
           {items.map((item) => (
             <div className="mb-2" key={item.id}>
@@ -68,6 +92,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children,
                       )
                     : ''
                 }
+                disabled={item.disabled}
                 name={item.name}
                 price={item.price}
                 quantity={item.quantity}
@@ -77,6 +102,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children,
             </div>
           ))}
         </div>
+      
         <SheetFooter className="mx-6 bg-white p-8">
           <div className="w-full">
             <div className="flex mb-4">
@@ -95,7 +121,10 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children,
             </Link>
           </div>
         </SheetFooter>
-      </SheetContent>
+        </>
+        )}
+        </div>
+      </SheetContent>  
     </Sheet>
   );
 };
