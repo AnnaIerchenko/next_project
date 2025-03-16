@@ -1,7 +1,7 @@
 import React from "react";
 import { CheckoutItemDetails, WhiteBlock } from ".";
 import { ArrowRight, Package, Percent, Truck } from "lucide-react";
-import { Button } from "../ui";
+import { Button, Skeleton } from "../ui";
 import { cn } from "@/lib/utils";
 
 const VAT = 15
@@ -9,9 +9,10 @@ const DELIVERY_PRICE = 250
 
 interface Props {
   totalAmount: number;
+  loading?: boolean;
   className?: string;
 }
-export const CheckoutSidebar: React.FC<Props> = ({totalAmount, className}) => {
+export const CheckoutSidebar: React.FC<Props> = ({totalAmount, loading, className}) => {
   const vatPrice = (totalAmount * VAT) / 100
   const totalPrice = totalAmount + vatPrice + DELIVERY_PRICE
 
@@ -19,7 +20,10 @@ export const CheckoutSidebar: React.FC<Props> = ({totalAmount, className}) => {
     <WhiteBlock className={cn("p-6 sticky top-4", className)}>
     <div className="flex flex-col gap-1">
       <span className="text-xl">Total:</span>
-      <span className="text-[34px] font-extrabold">{totalPrice}$</span>
+      {
+        loading ? <Skeleton className="w-48 h-11"/> :
+      <span className="h-11 text-[34px] font-extrabold">{totalPrice}$</span>
+      }
     </div>
     
     <CheckoutItemDetails title={
@@ -28,21 +32,21 @@ export const CheckoutSidebar: React.FC<Props> = ({totalAmount, className}) => {
         Items cost:
       </div>
     }
-    value={`${totalAmount} $`}/>
+    value={loading ? <Skeleton className="w-14 h-6 rounded-[6px]"/> : `${totalAmount} $`}/>
     <CheckoutItemDetails title={      
       <div className="flex items-center">
         <Percent size={18} className="mr-2 text-gray-400"/>
           Tax:
       </div>
      }
-      value={`${vatPrice}`}/>
+      value={loading ? <Skeleton className="w-14 h-6 rounded-[6px]"/> : `${vatPrice}`}/>
     <CheckoutItemDetails title={
       <div className="flex items-center">
         <Truck size={18} className="mr-2 text-gray-400"/>
           Delivery
       </div>
       }
-      value={`${DELIVERY_PRICE}`} />
+      value={loading ? <Skeleton className="w-14 h-6 rounded-[6px]"/> : `${DELIVERY_PRICE}`} />
 
       <Button 
         type="submit"

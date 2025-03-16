@@ -6,7 +6,7 @@ import { zodResolver} from '@hookform/resolvers/zod'
 import { CheckoutFormValues, checkoutFormSchema } from "@/components/shared/checkout/checkout-form-schema";
 
 export default function ChackoutPage(){
-  const { totalAmount, updateItemQuantity, items, removeCartItem} = useCart()
+  const { totalAmount, updateItemQuantity, items, removeCartItem, loading} = useCart()
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
     defaultValues: {
@@ -38,13 +38,14 @@ export default function ChackoutPage(){
                 onClickCountButton={onClickCountButton}
                 removeCartItem={removeCartItem}
                 items={items}
+                loading={loading}
               />
-              <CheckoutPersonalInfo />
-              <CheckoutAddressInfo />
+              <CheckoutPersonalInfo className={loading ? "opacity-40 pointer-events-none": ''}/>
+              <CheckoutAddressInfo className={loading ? "opacity-40 pointer-events-none": ''}/>
             </div>
             {/* right side */}
             <div className="w-[400px]">
-                <CheckoutSidebar totalAmount={totalAmount}/>
+                <CheckoutSidebar totalAmount={totalAmount} loading={loading}/>
             </div>
           </div>
         </form>

@@ -1,7 +1,6 @@
 import { CartItemProps } from "./cart-item-details/cart-item-details.types";
 import * as CartItemDetails from './cart-item-details'
 import { cn } from "@/lib/utils";
-import { Button } from "../ui";
 import { X } from "lucide-react";
 
 
@@ -25,9 +24,9 @@ export const CheckoutItem: React.FC<Props> = ({
       <CartItemDetails.Price value={price}/>
       <div className="flex items-center gap-5 ml-20">
         <CartItemDetails.CountButton onClick={onClickCountButton} value={quantity} />
-        <Button onClick={onClickRemove}>
+        <button type="button" onClick={onClickRemove}>
           <X className="text-gray-400 cursor-pointer hover:text-gray-600" />
-        </Button>
+        </button>
       </div>
     </div>
   )
