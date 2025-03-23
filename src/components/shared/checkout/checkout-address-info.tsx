@@ -9,7 +9,7 @@ export const CheckoutAddressInfo: React.FC<Props> = ({ className }) => {
   const {control} = useFormContext()
 
   return (
-    <WhiteBlock title="3.Address">
+    <WhiteBlock title="3.Address" className={className}>
     <div className="flex flex-col gap-5">
       <Controller 
         control={control}

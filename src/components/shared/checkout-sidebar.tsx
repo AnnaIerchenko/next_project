@@ -49,6 +49,7 @@ export const CheckoutSidebar: React.FC<Props> = ({totalAmount, loading, classNam
       value={loading ? <Skeleton className="w-14 h-6 rounded-[6px]"/> : `${DELIVERY_PRICE}`} />
 
       <Button 
+        loading={loading}
         type="submit"
         className="w-full h-14 rounded-2xl mt-6 text-base font-bold"
       >

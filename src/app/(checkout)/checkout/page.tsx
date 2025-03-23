@@ -4,8 +4,12 @@ import { useCart } from "../../../../hooks";
 import { FormProvider, SubmitHandler, useForm} from 'react-hook-form'
 import { zodResolver} from '@hookform/resolvers/zod'
 import { CheckoutFormValues, checkoutFormSchema } from "@/components/shared/checkout/checkout-form-schema";
+import { createOrder } from "@/app/actions";
+import toast from "react-hot-toast";
+import React, { useState } from "react";
 
 export default function ChackoutPage(){
+  const [submitting, setSubmitting] = React.useState(false)
   const { totalAmount, updateItemQuantity, items, removeCartItem, loading} = useCart()
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
@@ -18,8 +22,28 @@ export default function ChackoutPage(){
       comment: '',
     }
   })
-  const onSubmit = (data: CheckoutFormValues) => {
+  const onSubmit = async (data: CheckoutFormValues) => {
     console.log(data)
+    console.log(await createOrder(data))
+    try {
+      setSubmitting(true);
+
+      let url = await createOrder(data);
+
+      toast.error('Order created successfully! 📝 Go to pay... ', {
+        icon: '✅',
+      });
+
+      if (url) {
+        location.href = url;
+      }
+    } catch (err) {
+      console.log(err);
+      setSubmitting(false);
+      toast.error('Cant create order', {
+        icon: '❌',
+      });
+    }
   }
   const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
     const newQuantity = type === 'plus' ? quantity + 1 : quantity - 1;
@@ -45,7 +69,7 @@ export default function ChackoutPage(){
             </div>
             {/* right side */}
             <div className="w-[400px]">
-                <CheckoutSidebar totalAmount={totalAmount} loading={loading}/>
+                <CheckoutSidebar totalAmount={totalAmount} loading={loading || submitting}/>
             </div>
           </div>
         </form>
