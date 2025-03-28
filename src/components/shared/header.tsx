@@ -3,13 +3,10 @@ import { cn } from '@/lib/utils';
 import React from 'react'
 import { Container } from './container';
 import Image from 'next/image';
-import { Button } from '../ui';
-import { User } from 'lucide-react';
 import Link from 'next/link';
-import { CartButton, SearchInput } from '.';
-import { useSearchParams } from 'next/navigation';
+import { AuthModal, CartButton, ProfileButton, SearchInput } from '.';
+import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
-
 
 interface Props {
   hasSearch?: boolean;
@@ -18,13 +15,25 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({hasSearch = true, hasCart = true, className}) => {
+  const router = useRouter()
+  const [openAuthModal, setOpenAuthModal] = React.useState(false)
   const searchParams = useSearchParams()
+
   React.useEffect(() => {
-    console.log(searchParams.has('paid'), 555)
+    let toastMessage = ''
+    // console.log(searchParams.has('paid'), 555)
     if(searchParams.has('paid')){
+      toastMessage = 'Your order is successfully paid! All info already at your email!'}
+    if(searchParams.has('verified')){
+      toastMessage = 'Your email confirmed!' 
+    }
+    if(toastMessage){
       setTimeout(() => {
-        toast.success('You successfully make payment for your order!')
-      }, 500)
+        router.replace('/')
+        toast.success(toastMessage, {
+          duration: 3000
+        })
+      }, 1000)
     }
   }, [])
   return (
@@ -46,10 +55,8 @@ export const Header: React.FC<Props> = ({hasSearch = true, hasCart = true, class
         </div>}
         {/* right side */}
         <div className='flex items-center gap-4'>
-          <Button variant={'outline'} className='flex items-center gap-1'>
-            <User size={16}/>
-            Log in
-          </Button>
+          <AuthModal open={openAuthModal} onClose={() => setOpenAuthModal(false)}/>
+          <ProfileButton onClickSignIn={() => setOpenAuthModal(true)}/>
 
           {hasCart && <CartButton /> }
           
